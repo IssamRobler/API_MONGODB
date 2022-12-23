@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRepository = void 0;
+const httpstatus_common_1 = require("../../common/httpstatus/httpstatus.common");
+const service_error_common_1 = require("../../common/service.error/service.error.common");
 const base_repository_1 = require("../base.repository");
 const collection_names_1 = require("../collection.names");
 class UserRepository extends base_repository_1.BaseRepository {
@@ -25,8 +27,9 @@ class UserRepository extends base_repository_1.BaseRepository {
                 return !!userFound;
             }
             catch (err) {
-                console.error(err);
-                throw err;
+                throw new service_error_common_1.ServiceError("Something has gone wrong with the server.")
+                    .setAdditionalErrorMessage(err)
+                    .setHttpStatus(httpstatus_common_1.HTTPStatus.SERVERERROR);
             }
         });
     }

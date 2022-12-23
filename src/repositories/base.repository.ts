@@ -1,4 +1,7 @@
 import { InsertOneResult, Collection } from "mongodb";
+import { ErrorType } from "../common/error.type/error.type";
+import { HTTPStatus } from "../common/httpstatus/httpstatus.common";
+import { ServiceError } from "../common/service.error/service.error.common";
 import { db } from "../mongodb/MongoDBConnection";
 
 export class BaseRepository<T> {
@@ -16,7 +19,9 @@ export class BaseRepository<T> {
       // and we convert to boolean result (0 false, 1 true)
       return result.acknowledged;
     } catch (err) {
-      throw err;
+      throw new ServiceError("Something has gone wrong with the server.")
+        .setAdditionalErrorMessage(err)
+        .setHttpStatus(HTTPStatus.SERVERERROR);
     }
   }
   update(id: string, item: T): Promise<boolean> {
