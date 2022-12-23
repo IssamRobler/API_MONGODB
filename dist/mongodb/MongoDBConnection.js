@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connection = exports.MongoDBConnection = void 0;
+exports.db = exports.MongoDBConnection = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv = require("dotenv");
 class MongoDBConnection {
@@ -57,7 +57,10 @@ class MongoDBConnection {
             }
         });
     }
+    getCollection(collecltionName) {
+        return this.client.db().collection(collecltionName);
+    }
 }
 exports.MongoDBConnection = MongoDBConnection;
 MongoDBConnection.instance = null;
-exports.connection = MongoDBConnection.getInstance();
+exports.db = MongoDBConnection.getInstance();
