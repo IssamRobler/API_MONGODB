@@ -1,4 +1,5 @@
 import { ErrorType } from "../../common/error.type/error.type";
+import { HTTPStatus } from "../../common/httpstatus/httpstatus.common";
 import { hashPassword } from "../../common/password.management/password.management.common";
 import { ServiceError } from "../../common/service.error/service.error.common";
 import { ServiceResponse } from "../../common/service.response/service.response.common";
@@ -8,7 +9,6 @@ import { User } from "../../models/user.model";
 import { UserRepository } from "../../repositories/user/user.repository";
 
 export class AuthenticationService {
-  
   public async createAccount(userInfo: UserSignUpInfo) {
     try {
       const userRepo: UserRepository = new UserRepository();
@@ -18,11 +18,9 @@ export class AuthenticationService {
       if (userFound) {
         const error: ServiceError = new ServiceError(
           "User with given email already exist."
-        ).setErrorType(ErrorType.USERALREADYEXIST);
-        throw error
+        ).setHttpStatus(HTTPStatus.BADREQUEST);
+        throw error;
       } else {
-
-        
         const new_user: User = {
           role: ROLE.USER,
           email: userInfo.email,
@@ -34,14 +32,13 @@ export class AuthenticationService {
         return new ServiceResponse({ created });
       }
     } catch (err) {
-
-      const error: ServiceError = new ServiceError(
-        "Something has gone wrong with the server."
-      )
-        .setErrorType(ErrorType.SERVERERROR)
-        .setAdditionalErrorMessage(err);
-
-      throw error
+      if (err instanceof ServiceError) {
+        throw err;
+      } else {
+        throw new ServiceError("Something has gone wrong.")
+          .setAdditionalErrorMessage(err.message)
+          .setHttpStatus(HTTPStatus.SERVERERROR);
+      }
     }
   }
 }

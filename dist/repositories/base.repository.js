@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseRepository = void 0;
+const httpstatus_common_1 = require("../common/httpstatus/httpstatus.common");
+const service_error_common_1 = require("../common/service.error/service.error.common");
 const MongoDBConnection_1 = require("../mongodb/MongoDBConnection");
 class BaseRepository {
     constructor(collectionName) {
@@ -26,7 +28,9 @@ class BaseRepository {
                 return result.acknowledged;
             }
             catch (err) {
-                throw err;
+                throw new service_error_common_1.ServiceError("Something has gone wrong with the server.")
+                    .setAdditionalErrorMessage(err)
+                    .setHttpStatus(httpstatus_common_1.HTTPStatus.SERVERERROR);
             }
         });
     }

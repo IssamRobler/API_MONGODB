@@ -1,21 +1,21 @@
 import { ErrorType } from "../error.type/error.type";
+import { HTTPStatus } from "../httpstatus/httpstatus.common";
 
 export class ServiceError extends Error {
-  public errorType: ErrorType;
   public additional: string;
-  public message: string;
-  public httpStatus:number
+  public error_message: string;
+  public httpStatus: HTTPStatus;
   constructor(message: string) {
     super(message);
-    this.message = message
-  }
-  public setErrorType(errorType: ErrorType) {
-    this.errorType = errorType;
-    return this;
+    this.error_message = message;
   }
 
-  public setAdditionalErrorMessage(additional: string) {
+  public setAdditionalErrorMessage(additional: string): ServiceError {
     this.additional = additional;
+    return this;
+  }
+  public setHttpStatus(httpStatus: HTTPStatus): ServiceError {
+    this.httpStatus = httpStatus;
     return this;
   }
 }

@@ -11,16 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const authentication_service_1 = require("../../service/authentication/authentication.service");
+const user_signup_entities_1 = require("../../entities/user.signup.entities");
+const validate_entities_1 = require("../../entities/validate.entities");
 const authenticationRouter = express.Router();
-authenticationRouter.post("/createAccount", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+authenticationRouter.post("/createAccount", ...(0, validate_entities_1.default)(user_signup_entities_1.userSignUpInfoschema), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const service = new authentication_service_1.AuthenticationService();
         const created = yield service.createAccount(req.body);
-        console.log(created);
         res.status(200).send(created);
     }
     catch (err) {
-        res.status(403).send({ message: err.message });
+        next(err);
     }
 }));
 authenticationRouter.post("/login", (req, res) => { });

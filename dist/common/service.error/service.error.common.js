@@ -4,14 +4,14 @@ exports.ServiceError = void 0;
 class ServiceError extends Error {
     constructor(message) {
         super(message);
-        this.message = message;
-    }
-    setErrorType(errorType) {
-        this.errorType = errorType;
-        return this;
+        this.error_message = message;
     }
     setAdditionalErrorMessage(additional) {
         this.additional = additional;
+        return this;
+    }
+    setHttpStatus(httpStatus) {
+        this.httpStatus = httpStatus;
         return this;
     }
 }

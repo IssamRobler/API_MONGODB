@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationService = void 0;
-const error_type_1 = require("../../common/error.type/error.type");
+const httpstatus_common_1 = require("../../common/httpstatus/httpstatus.common");
 const password_management_common_1 = require("../../common/password.management/password.management.common");
 const service_error_common_1 = require("../../common/service.error/service.error.common");
 const service_response_common_1 = require("../../common/service.response/service.response.common");
@@ -23,8 +23,8 @@ class AuthenticationService {
                 const userRepo = new user_repository_1.UserRepository();
                 const userFound = yield userRepo.checkUserExistByEmail(userInfo.email);
                 if (userFound) {
-                    const error = new service_error_common_1.ServiceError("User with given email already exist.").setErrorType(error_type_1.ErrorType.USERALREADYEXIST);
-                    return new service_response_common_1.ServiceResponse(null, false, error);
+                    const error = new service_error_common_1.ServiceError("User with given email already exist.").setHttpStatus(httpstatus_common_1.HTTPStatus.BADREQUEST);
+                    throw error;
                 }
                 else {
                     const new_user = {
@@ -33,14 +33,18 @@ class AuthenticationService {
                         hashed_password: yield (0, password_management_common_1.hashPassword)(userInfo.password),
                     };
                     const created = yield userRepo.create(new_user);
-                    return new service_response_common_1.ServiceResponse({ created }, true, null);
+                    return new service_response_common_1.ServiceResponse({ created });
                 }
             }
             catch (err) {
-                const error = new service_error_common_1.ServiceError("Something has gone wrong with the server.")
-                    .setErrorType(error_type_1.ErrorType.SERVERERROR)
-                    .setAdditionalErrorMessage(err);
-                return new service_response_common_1.ServiceResponse(null, false, error);
+                if (err instanceof service_error_common_1.ServiceError) {
+                    throw err;
+                }
+                else {
+                    throw new service_error_common_1.ServiceError("Something has gone wrong.")
+                        .setAdditionalErrorMessage(err.message)
+                        .setHttpStatus(httpstatus_common_1.HTTPStatus.SERVERERROR);
+                }
             }
         });
     }
