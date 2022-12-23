@@ -15,7 +15,7 @@ export class MongoDBConnection {
     return MongoDBConnection.instance;
   }
 
-  public async init() {
+  private async init() {
     dotenv.config();
 
     /// Important to trim env variables initalized with package.json calls. weird bug.
@@ -37,7 +37,7 @@ export class MongoDBConnection {
       console.error(e);
     }
   }
-  
+
   public async cleanup() {
     try {
       await this.client.close();
@@ -45,6 +45,10 @@ export class MongoDBConnection {
       console.error(e);
     }
   }
+
+  public getCollection(collecltionName: string) {
+    return this.client.db().collection(collecltionName);
+  }
 }
 
-export const connection = MongoDBConnection.getInstance();
+export const db = MongoDBConnection.getInstance();
