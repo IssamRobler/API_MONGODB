@@ -1,4 +1,5 @@
 import { ErrorType } from "../../common/error.type/error.type";
+import { hashPassword } from "../../common/password.management/password.management.common";
 import { ServiceError } from "../../common/service.error/service.error.common";
 import { ServiceResponse } from "../../common/service.response/service.response.common";
 import { ROLE } from "../../entities/role.entitites";
@@ -18,17 +19,19 @@ export class AuthenticationService {
         const error: ServiceError = new ServiceError(
           "User with given email already exist."
         ).setErrorType(ErrorType.USERALREADYEXIST);
-        return new ServiceResponse(null, false, error);
+        throw error
       } else {
+
+        
         const new_user: User = {
           role: ROLE.USER,
           email: userInfo.email,
-          hashed_password: userInfo.password,
+          hashed_password: await hashPassword(userInfo.password),
         };
 
         const created = await userRepo.create(new_user);
 
-        return new ServiceResponse({ created }, true, null);
+        return new ServiceResponse({ created });
       }
     } catch (err) {
 
@@ -38,7 +41,7 @@ export class AuthenticationService {
         .setErrorType(ErrorType.SERVERERROR)
         .setAdditionalErrorMessage(err);
 
-      return new ServiceResponse(null, false, error);
+      throw error
     }
   }
 }

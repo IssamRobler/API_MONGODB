@@ -17,10 +17,17 @@ class BaseRepository {
     }
     create(item) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.collection.insertOne(item);
-            // after the insert operations, we returns only ok property (that haves a 1 or 0 results)
-            // and we convert to boolean result (0 false, 1 true)
-            return result.acknowledged;
+            try {
+                const result = yield this.collection.insertOne(item, {
+                    writeConcern: { j: true },
+                });
+                // after the insert operations, we returns only ok property (that haves a 1 or 0 results)
+                // and we convert to boolean result (0 false, 1 true)
+                return result.acknowledged;
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     update(id, item) {

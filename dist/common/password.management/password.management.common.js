@@ -9,19 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require("express");
-const authentication_service_1 = require("../../service/authentication/authentication.service");
-const authenticationRouter = express.Router();
-authenticationRouter.post("/createAccount", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const service = new authentication_service_1.AuthenticationService();
-        const created = yield service.createAccount(req.body);
-        console.log(created);
-        res.status(200).send(created);
-    }
-    catch (err) {
-        res.status(403).send({ message: err.message });
-    }
-}));
-authenticationRouter.post("/login", (req, res) => { });
-exports.default = authenticationRouter;
+exports.checkValidPassword = exports.hashPassword = exports.checkPassword = void 0;
+const bcrypt_1 = require("bcrypt");
+function checkPassword(plainpassword, hashedPassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield (0, bcrypt_1.compare)(plainpassword, hashedPassword);
+    });
+}
+exports.checkPassword = checkPassword;
+function hashPassword(plainPassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const SALT = 10;
+        return yield (0, bcrypt_1.hash)(plainPassword, SALT);
+    });
+}
+exports.hashPassword = hashPassword;
+function checkValidPassword(plainPassword) {
+    return true;
+}
+exports.checkValidPassword = checkValidPassword;

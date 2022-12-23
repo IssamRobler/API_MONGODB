@@ -11,16 +11,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRepository = void 0;
 const base_repository_1 = require("../base.repository");
+const collection_names_1 = require("../collection.names");
 class UserRepository extends base_repository_1.BaseRepository {
+    constructor() {
+        super(collection_names_1.COLLECTION.User);
+    }
     checkUserExistByEmail(userEmail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const userFound = yield this.collection.findOne({ email: userEmail });
+                const userFound = yield this.collection.findOne({
+                    email: userEmail,
+                });
                 return !!userFound;
             }
             catch (err) {
                 console.error(err);
-                throw new Error("Something went wrong with the server....");
+                throw err;
             }
         });
     }
