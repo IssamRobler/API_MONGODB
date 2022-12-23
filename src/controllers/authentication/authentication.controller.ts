@@ -3,13 +3,14 @@ import { AuthenticationService } from "../../service/authentication/authenticati
 
 const authenticationRouter = express.Router();
 
-authenticationRouter.post("/createAccount", async (req, res) => {
+authenticationRouter.post("/createAccount", async (req, res,next) => {
   try {
     const service = new AuthenticationService();
     const created = await service.createAccount(req.body);
-    res.status(200).send({ usercreated: created });
+    console.log(created)
+    res.status(200).send(created);
   } catch (err) {
-    res.status(403).send({ message: err.message });
+    next(err)
   }
 });
 
