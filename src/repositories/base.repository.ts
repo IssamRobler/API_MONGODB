@@ -30,10 +30,17 @@ export class BaseRepository<T> {
   delete(id: string): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  find(item: T): Promise<T[]> {
+  find(query: Partial<T>): Promise<T[]> {
     throw new Error("Method not implemented.");
   }
-  findOne(id: string): Promise<T> {
-    throw new Error("Method not implemented.");
+  async findOne(query: Partial<T>): Promise<T> {
+    try {
+      const data: T = await this.collection.findOne<T>(query);
+      return data;
+    } catch (err) {
+      throw new ServiceError("Something has gone wrong with the server.")
+        .setAdditionalErrorMessage(err)
+        .setHttpStatus(HTTPStatus.SERVERERROR);
+    }
   }
 }

@@ -12,10 +12,28 @@ export class UserRepository extends BaseRepository<User> {
   }
   public async checkUserExistByEmail(userEmail: string): Promise<boolean> {
     try {
-      const userFound: WithId<Document> = await this.collection.findOne({
-        email: userEmail,
-      });
+      const userFound: User = await super.findOne({ email: userEmail });
       return !!userFound;
+    } catch (err) {
+      throw new ServiceError("Something has gone wrong with the server.")
+        .setAdditionalErrorMessage(err)
+        .setHttpStatus(HTTPStatus.SERVERERROR);
+    }
+  }
+
+  public async findUserByEmail(userEmail: string): Promise<User> {
+    try {
+      return await super.findOne({ email: userEmail });
+    } catch (err) {
+      throw new ServiceError("Something has gone wrong with the server.")
+        .setAdditionalErrorMessage(err)
+        .setHttpStatus(HTTPStatus.SERVERERROR);
+    }
+  }
+
+  public async findUserById(userId: string): Promise<User> {
+    try {
+      return await super.findOne({ userId: userId });
     } catch (err) {
       throw new ServiceError("Something has gone wrong with the server.")
         .setAdditionalErrorMessage(err)
