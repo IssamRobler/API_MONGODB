@@ -1,12 +1,13 @@
-import { MongoClient } from "mongodb";
+import { Collection, MongoClient } from "mongodb";
 import * as dotenv from "dotenv";
 
 export class MongoDBConnection {
   private static instance: MongoDBConnection = null;
   private client: MongoClient;
+  private isConnected: boolean = false;
   private constructor() {}
 
-  public static getInstance() {
+  public static getInstance(): MongoDBConnection {
     console.log("Initialized");
     if (MongoDBConnection.instance === null) {
       MongoDBConnection.instance = new MongoDBConnection();
@@ -15,7 +16,7 @@ export class MongoDBConnection {
     return MongoDBConnection.instance;
   }
 
-  private async init() {
+  private async init(): Promise<void> {
     dotenv.config();
 
     /// Important to trim env variables initalized with package.json calls. weird bug.
@@ -31,24 +32,52 @@ export class MongoDBConnection {
           minPoolSize: 100,
         });
       }
+      await this.connect();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  public async connect(): Promise<boolean> {
+    if (this.isConnected) {
+      return true;
+    }
+    try {
       await this.client.connect();
       console.log("Connected !");
+      this.isConnected = true;
     } catch (e) {
       console.error(e);
+      return false;
     }
   }
-
-  public async cleanup() {
+  public async close(): Promise<boolean> {
+    if (!this.isConnected) {
+      return true;
+    }
     try {
       await this.client.close();
+      console.log("closed");
+      this.isConnected = false;
     } catch (e) {
       console.error(e);
+      return false;
     }
   }
 
-  public getCollection(collecltionName: string) {
-    return this.client.db().collection(collecltionName);
+  public getCollection(collectionName: string): Collection {
+    return this.client.db().collection(collectionName);
+  }
+
+  public async clearDatabase(): Promise<boolean> {
+    try {
+      const cleared: boolean = await this.client.db().dropDatabase();
+      return cleared;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
   }
 }
 
-export const db = MongoDBConnection.getInstance();
+export const db: MongoDBConnection = MongoDBConnection.getInstance();
