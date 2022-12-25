@@ -19,12 +19,43 @@ class UserRepository extends base_repository_1.BaseRepository {
         super(collection_names_1.COLLECTION.User);
     }
     checkUserExistByEmail(userEmail) {
+        const _super = Object.create(null, {
+            findOne: { get: () => super.findOne }
+        });
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const userFound = yield this.collection.findOne({
-                    email: userEmail,
-                });
+                const userFound = yield _super.findOne.call(this, { email: userEmail });
                 return !!userFound;
+            }
+            catch (err) {
+                throw new service_error_common_1.ServiceError("Something has gone wrong with the server.")
+                    .setAdditionalErrorMessage(err)
+                    .setHttpStatus(httpstatus_common_1.HTTPStatus.SERVERERROR);
+            }
+        });
+    }
+    findUserByEmail(userEmail) {
+        const _super = Object.create(null, {
+            findOne: { get: () => super.findOne }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield _super.findOne.call(this, { email: userEmail });
+            }
+            catch (err) {
+                throw new service_error_common_1.ServiceError("Something has gone wrong with the server.")
+                    .setAdditionalErrorMessage(err)
+                    .setHttpStatus(httpstatus_common_1.HTTPStatus.SERVERERROR);
+            }
+        });
+    }
+    findUserById(userId) {
+        const _super = Object.create(null, {
+            findOne: { get: () => super.findOne }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield _super.findOne.call(this, { userId: userId });
             }
             catch (err) {
                 throw new service_error_common_1.ServiceError("Something has gone wrong with the server.")

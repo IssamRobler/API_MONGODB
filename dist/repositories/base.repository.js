@@ -40,11 +40,21 @@ class BaseRepository {
     delete(id) {
         throw new Error("Method not implemented.");
     }
-    find(item) {
+    find(query) {
         throw new Error("Method not implemented.");
     }
-    findOne(id) {
-        throw new Error("Method not implemented.");
+    findOne(query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield this.collection.findOne(query);
+                return data;
+            }
+            catch (err) {
+                throw new service_error_common_1.ServiceError("Something has gone wrong with the server.")
+                    .setAdditionalErrorMessage(err)
+                    .setHttpStatus(httpstatus_common_1.HTTPStatus.SERVERERROR);
+            }
+        });
     }
 }
 exports.BaseRepository = BaseRepository;

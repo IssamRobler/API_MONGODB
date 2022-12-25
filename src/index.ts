@@ -6,6 +6,7 @@ import {
   critialErrorMiddleware,
   errorMiddleware,
 } from "./common/middleware/error.middleware";
+import userRouter from "./controllers/user/user.controller";
 dotenv.config();
 
 const app = express();
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authenticationRouter);
+app.use("/user", userRouter);
 app.use(errorMiddleware);
 app.use(critialErrorMiddleware);
 

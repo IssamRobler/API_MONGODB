@@ -13,6 +13,7 @@ const express = require("express");
 const authentication_service_1 = require("../../service/authentication/authentication.service");
 const user_signup_entities_1 = require("../../entities/user.signup.entities");
 const validate_entities_1 = require("../../entities/validate.entities");
+const user_login_entity_1 = require("../../entities/user.login.entity");
 const authenticationRouter = express.Router();
 authenticationRouter.post("/createAccount", ...(0, validate_entities_1.default)(user_signup_entities_1.userSignUpInfoschema), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,5 +25,14 @@ authenticationRouter.post("/createAccount", ...(0, validate_entities_1.default)(
         next(err);
     }
 }));
-authenticationRouter.post("/login", (req, res) => { });
+authenticationRouter.post("/login", ...(0, validate_entities_1.default)(user_login_entity_1.userLoginInfoschema), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const service = new authentication_service_1.AuthenticationService();
+        const token = yield service.login(req.body);
+        res.status(200).send({ token: token });
+    }
+    catch (err) {
+        next(err);
+    }
+}));
 exports.default = authenticationRouter;
