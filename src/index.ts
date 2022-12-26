@@ -8,7 +8,15 @@ import {
 } from "./common/middleware/error.middleware";
 import userRouter from "./controllers/user/user.controller";
 import { db } from "./mongodb/MongoDBConnection";
+import * as swaggerUi from "swagger-ui-express";
+import { specs } from "./swagger/swagger.config";
+
 dotenv.config();
+
+(async () => {
+  await db.init();
+})();
+
 const app = express();
 
 app.use(
@@ -24,9 +32,9 @@ const PORT = process.env.API_PORT;
 app.get("/", (req, res) => {
   res.send("Hi issam");
 });
-
 app.use("/auth", authenticationRouter);
 app.use("/user", userRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use(errorMiddleware);
 app.use(critialErrorMiddleware);
 
@@ -41,7 +49,7 @@ process.on("SIGINT", async function () {
     console.log("Http server closed. Cleanup db");
     // boolean means [force], see in mongoose do
   });
-  await db.close()
+  await db.close();
   process.exit(0);
 });
 export default server;

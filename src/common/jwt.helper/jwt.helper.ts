@@ -7,7 +7,12 @@ export function authenticateToken(req, res, next) {
   const authHeader: string = req.headers["authorization"];
   const token: string = authHeader && authHeader.split(" ")[1];
 
-  if (token == null) return res.sendStatus(401);
+  if (token == null)  {
+    const error: ServiceError = new ServiceError(
+      "Must supply valid token"
+    ).setHttpStatus(HTTPStatus.UNAUTHORIZED);
+    res.status(error.httpStatus).send(error as ServiceError);
+  }
 
   jwt.verify(
     token,
