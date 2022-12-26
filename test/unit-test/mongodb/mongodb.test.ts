@@ -2,6 +2,10 @@ import * as chai from "chai";
 import { db } from "../../../src/mongodb/MongoDBConnection";
 import { clearDatabase, setupDatabase } from "../../setup/db.setup";
 
+(async () => {
+  await db.init();
+})();
+
 const expect = chai.expect;
 
 describe("Testing MongoDB Connection", () => {

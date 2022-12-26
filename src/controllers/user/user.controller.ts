@@ -6,6 +6,21 @@ import { UserService } from "../../service/user/user.service";
 
 const userRouter = express.Router();
 
+/**
+ * @swagger
+ * /user/profile:
+ *  get:
+ *    security:              
+ *      - bearerAuth: []     
+ *    tags:
+ *      - Users
+ *    description: Returns a single person based on their JWT token
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      200:
+ *        description: A single person
+ */
 userRouter.get(
   "/profile",
   authenticateToken,

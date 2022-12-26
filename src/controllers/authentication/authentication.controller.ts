@@ -14,6 +14,26 @@ import {
 
 const authenticationRouter = express.Router();
 
+/**
+/**
+ * @swagger
+ * /auth/createAccount:
+ *   post:
+ *     description: Create Account for user
+ *     tags: 
+ *        - Auth
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserSignUp'
+ *     responses:
+ *       200:
+ *         description: A single person
+ */
 authenticationRouter.post(
   "/createAccount",
   ...validate(userSignUpInfoschema),
@@ -32,6 +52,26 @@ authenticationRouter.post(
   }
 );
 
+/**
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     description: Login user
+ *     tags: 
+ *        - Auth
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserLogin'
+ *     responses:
+ *       200:
+ *         description: A single person
+ */
 authenticationRouter.post(
   "/login",
   ...validate(userLoginInfoschema),
@@ -40,6 +80,7 @@ authenticationRouter.post(
     res: Response,
     next: express.NextFunction
   ) => {
+    console.log(req)
     try {
       const service = new AuthenticationService();
       const token = await service.login(req.body);

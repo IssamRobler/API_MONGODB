@@ -11,12 +11,11 @@ export class MongoDBConnection {
     console.log("Initialized");
     if (MongoDBConnection.instance === null) {
       MongoDBConnection.instance = new MongoDBConnection();
-      MongoDBConnection.instance.init();
     }
     return MongoDBConnection.instance;
   }
 
-  private async init(): Promise<void> {
+  public async init(): Promise<void> {
     dotenv.config();
 
     /// Important to trim env variables initalized with package.json calls. weird bug.
