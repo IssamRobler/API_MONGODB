@@ -10,11 +10,9 @@ const expect = chai.expect;
 
 describe("Testing MongoDB Connection", () => {
   beforeEach(async () => {
-    console.log("Connecting to db before test");
     await db.connect();
   });
   afterEach(async () => {
-    console.log("Closing to db after test");
     await db.close();
   });
 
