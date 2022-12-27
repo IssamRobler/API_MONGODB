@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  node: circleci/node@5.0.2
+  node: circleci/node
 
 jobs:
   build_and_tests:
@@ -10,7 +10,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command : npm run test
+          command: npm run test
           name: Run tests
       - run:
           command: npm run build
