@@ -4,9 +4,16 @@ orbs:
 
 jobs:
   build_and_tests:
-    executor: node/default
+    docker:
+      - image: circleci/node:16.0.0
+      - image: circleci/mongo:4.2.0
+        environment:
+          -API_MONGODB_TEST: "mongodb://localhost:27017/test_db"
     steps:
       - checkout
+      - run:
+          command : sudo apt-get install -y mongodb
+          name: Installing mongodb
       - node/install-packages:
           pkg-manager: npm
       - run:
