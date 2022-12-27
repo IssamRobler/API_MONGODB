@@ -5,8 +5,8 @@ orbs:
 jobs:
   build_and_tests:
     docker:
-      - image: circleci/node:16.0.0
-      - image: circleci/mongo:4.2.0
+      - image: circleci/node
+      - image: circleci/mongo
         environment:
           -API_MONGODB_TEST: "mongodb://localhost:27017/test_db"
     steps:
