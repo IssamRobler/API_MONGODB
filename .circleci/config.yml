@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command : sudo apt-get install -y mongodb
+          command : sudo apt install -y mongodb-org
           name: Installing mongodb
       - node/install-packages:
           pkg-manager: npm
