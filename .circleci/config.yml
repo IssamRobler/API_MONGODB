@@ -11,9 +11,6 @@ jobs:
           -API_MONGODB_TEST: "mongodb://localhost:27017/test_db"
     steps:
       - checkout
-      - run:
-          command : sudo apt install -y mongodb-org
-          name: Installing mongodb
       - node/install-packages:
           pkg-manager: npm
       - run:
