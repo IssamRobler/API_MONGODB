@@ -6,7 +6,7 @@
   "scripts": {
     "test": "set NODE_ENV='development' && mocha --require ts-node/register './test/**/*.ts' --timeout 30000",
     "start:dev": "set NODE_ENV=development && node ./dist/src/index.js",
-    "start:prod": "set NODE_ENV=production && node ./dist/src/index.js",
+    "start:prod": "set NODE_ENV=production && node './dist/src/index.js'",
     "build" : "rm -rf ./dist/ && tsc"
   },
   "repository": {
