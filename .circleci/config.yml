@@ -7,9 +7,6 @@ jobs:
     docker:
       - image: circleci/node
       - image: circleci/mongo
-        environment:
-          -API_MONGODB_TEST: "mongodb://localhost:27017/test_db"
-          -NODE_ENV: "development"
     steps:
       - checkout
       - node/install-packages:
