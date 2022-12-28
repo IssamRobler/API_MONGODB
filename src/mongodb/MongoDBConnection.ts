@@ -19,6 +19,7 @@ export class MongoDBConnection {
     dotenv.config();
 
     /// Important to trim env variables initalized with package.json calls. weird bug.
+    console.log(process.env)
     try {
       if (process.env.NODE_ENV.trim() === "development") {
         console.log("Connecting to dev db...");
