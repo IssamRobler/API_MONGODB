@@ -11,7 +11,9 @@ import { db } from "./mongodb/MongoDBConnection";
 import * as swaggerUi from "swagger-ui-express";
 import { specs } from "./swagger/swagger.config";
 
-dotenv.config();
+if (process.env.NODE_ENV.trim() == "development") {
+  dotenv.config();
+}
 
 (async () => {
   await db.init();
