@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "rootDirs": ["./src","./test"],
+        "outDir": "./dist",
+        "allowJs": true,
+        "target": "es6",
+        "module": "CommonJS",
+        "removeComments": false
+    }
+}
